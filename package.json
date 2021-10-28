@@ -1,13 +1,16 @@
 {
-  "name": "canvas-games",
+  "name": "canvasgames",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "vite & rescript build -w",
+    "build": "vite build",
     "serve": "vite preview"
   },
   "devDependencies": {
-    "typescript": "^4.3.2",
+    "rescript": "^9.1.4",
     "vite": "^2.6.4"
+  },
+  "dependencies": {
+    "@rescript/react": "^0.10.3"
   }
 }
