@@ -6,7 +6,9 @@ function GameCanvas(Props) {
   var width = Props.width;
   var height = Props.height;
   var canvasClassName = Props.canvasClassName;
+  var canvasRef = Props.canvasRef;
   return React.createElement("canvas", {
+              ref: canvasRef,
               className: "game-canvas " + canvasClassName,
               height: height,
               width: width
