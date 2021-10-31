@@ -3,7 +3,14 @@
 import * as React from "react";
 
 function GameCanvas(Props) {
-  return React.createElement("canvas", undefined);
+  var width = Props.width;
+  var height = Props.height;
+  var canvasClassName = Props.canvasClassName;
+  return React.createElement("canvas", {
+              className: "game-canvas " + canvasClassName,
+              height: height,
+              width: width
+            });
 }
 
 var make = GameCanvas;
