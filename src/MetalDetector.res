@@ -1,3 +1,4 @@
+@send external getBoundingClientRect: Dom.element => unit = "click"
 type coords = {x: int, y: int}
 @react.component
 let make = () => {
@@ -9,8 +10,11 @@ let make = () => {
   let onMouseMove = e => {
     let x = ReactEvent.Mouse.clientX(e)
     let y = ReactEvent.Mouse.clientY(e)
-    setMouseCoords(_prev => {x: x, y: y})
-    Js.log(`x: ${Belt.Int.toString(x)} y: ${Belt.Int.toString(y)}`)
+
+    setMouseCoords(_prev => {
+      x: x - ReactEvent.Mouse.target(e)["offsetLeft"],
+      y: y - ReactEvent.Mouse.target(e)["offsetTop"],
+    })
   }
   <div>
     <h2> {React.string("metal detector game")} </h2>
