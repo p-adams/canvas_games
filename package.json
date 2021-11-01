@@ -5,7 +5,8 @@
     "dev": "vite & rescript build -w",
     "build": "vite build",
     "serve": "vite preview",
-    "re:clean": "rescript clean"
+    "re:clean": "rescript clean",
+    "re:build": "rescript build"
   },
   "devDependencies": {
     "rescript": "^9.1.4",
