@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "vite & rescript build -w",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "re:clean": "rescript clean"
   },
   "devDependencies": {
     "rescript": "^9.1.4",
