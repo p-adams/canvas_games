@@ -18,7 +18,7 @@ let make = () => {
         let ctx = getContext(dom, "2d")
         clearRect(ctx, 0, 0, 600, 500)
         beginPath(ctx)
-        fillRect(ctx, x, y, 25, 25)
+        fillRect(ctx, x - 10, y - 10, 25, 25)
       }
     | None => ()
     }

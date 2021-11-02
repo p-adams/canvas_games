@@ -36,7 +36,7 @@ function MetalDetector(Props) {
       var ctx = dom.getContext("2d");
       ctx.clearRect(0, 0, 600, 500);
       ctx.beginPath();
-      return ctx.fillRect(x$1, y$1, 25, 25);
+      return ctx.fillRect(x$1 - 10 | 0, y$1 - 10 | 0, 25, 25);
     }
     
   };
