@@ -14,8 +14,9 @@ function MetalDetector(Props) {
       });
   var setMouseCoords = match[1];
   var mouseCoords = match[0];
-  React.useEffect(function () {
-        
+  var dimensions = React.useRef({
+        width: 600,
+        height: 500
       });
   var onMouseMove = function (e) {
     var x = e.clientX;
@@ -34,15 +35,17 @@ function MetalDetector(Props) {
         return ;
       }
       var ctx = dom.getContext("2d");
-      ctx.clearRect(0, 0, 600, 500);
+      ctx.clearRect(0, 0, dimensions.current.width, dimensions.current.height);
       ctx.beginPath();
-      return ctx.fillRect(x$1 - 10 | 0, y$1 - 10 | 0, 25, 25);
+      ctx.arc(x$1, y$1, 20, 0, Math.imul(3, Math.PI | 0));
+      ctx.stroke();
+      return ;
     }
     
   };
   return React.createElement("div", undefined, React.createElement("h2", undefined, "metal detector game"), React.createElement(GameCanvas.make, {
-                  width: "600",
-                  height: "500",
+                  width: dimensions.current.width,
+                  height: dimensions.current.height,
                   canvasClassName: "metal-detector-canvas",
                   canvasRef: gameCanvasRef,
                   onMouseMove: onMouseMove

@@ -1,9 +1,9 @@
 @react.component
-let make = (~width, ~height, ~canvasClassName, ~canvasRef, ~onMouseMove) => {
+let make = (~width: int, ~height: int, ~canvasClassName, ~canvasRef, ~onMouseMove) => {
   <canvas
     ref={ReactDOM.Ref.domRef(canvasRef)}
-    width={width}
-    height={height}
+    width={width->Belt.Int.toString}
+    height={height->Belt.Int.toString}
     className={`game-canvas ${canvasClassName}`}
     onMouseMove={onMouseMove}
   />

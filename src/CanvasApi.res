@@ -1,0 +1,6 @@
+@send external getContext: (Dom.element, string) => 'a = "getContext"
+@send external fillRect: (Dom.element, int, int, int, int) => 'a = "fillRect"
+@send external clearRect: (Dom.element, int, int, int, int) => unit = "clearRect"
+@send external beginPath: Dom.element => unit = "beginPath"
+@send external arc: (Dom.element, int, int, int, int, int) => unit = "arc"
+@send external stroke: Dom.element => unit = "stroke"
