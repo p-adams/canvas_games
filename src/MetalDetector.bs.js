@@ -2,7 +2,28 @@
 
 import * as Curry from "../node_modules/rescript/lib/es6/curry.js";
 import * as React from "react";
+import * as Js_math from "../node_modules/rescript/lib/es6/js_math.js";
 import * as GameCanvas from "./GameCanvas.bs.js";
+
+var tiles = [
+  [
+    0,
+    0,
+    0
+  ],
+  [
+    0,
+    0,
+    0
+  ],
+  [
+    0,
+    0,
+    0
+  ]
+];
+
+var getRandomInt = Js_math.random_int;
 
 function MetalDetector(Props) {
   var gameCanvasRef = React.useRef(null);
@@ -18,6 +39,25 @@ function MetalDetector(Props) {
         width: 600,
         height: 500
       });
+  var match$1 = React.useState(function () {
+        return [];
+      });
+  var setMetalCoords = match$1[1];
+  var metalCoords = match$1[0];
+  React.useEffect((function () {
+          tiles.forEach(function (rows) {
+                rows.forEach(function (param) {
+                      return Curry._1(setMetalCoords, (function (_prev) {
+                                    return _prev.concat([{
+                                                  x: Js_math.random_int(0, 600),
+                                                  y: Js_math.random_int(0, 500)
+                                                }]);
+                                  }));
+                    });
+                
+              });
+          
+        }), []);
   var onMouseMove = function (e) {
     var x = e.clientX;
     var y = e.clientY;
@@ -37,8 +77,12 @@ function MetalDetector(Props) {
       var ctx = dom.getContext("2d");
       ctx.clearRect(0, 0, dimensions.current.width, dimensions.current.height);
       ctx.beginPath();
-      ctx.arc(x$1, y$1, 20, 0, Math.imul(3, Math.PI | 0));
+      ctx.arc(x$1, y$1 - 20 | 0, 20, 0, Math.imul(3, Math.PI | 0));
       ctx.stroke();
+      metalCoords.forEach(function (coords) {
+            ctx.beginPath();
+            return ctx.fillRect(coords.x, coords.y, 20, 20);
+          });
       return ;
     }
     
@@ -55,6 +99,8 @@ function MetalDetector(Props) {
 var make = MetalDetector;
 
 export {
+  tiles ,
+  getRandomInt ,
   make ,
   
 }
