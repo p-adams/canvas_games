@@ -81,6 +81,7 @@ function MetalDetector(Props) {
       ctx.stroke();
       metalCoords.forEach(function (coords) {
             ctx.beginPath();
+            ctx.fillStyle = "green";
             return ctx.fillRect(coords.x, coords.y, 20, 20);
           });
       return ;

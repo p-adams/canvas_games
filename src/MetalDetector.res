@@ -39,6 +39,7 @@ let make = () => {
         CanvasApi.stroke(ctx)
         Js.Array2.forEach(metalCoords, coords => {
           CanvasApi.beginPath(ctx)
+          ctx.fillStyle = "green"
           CanvasApi.fillRect(ctx, coords.x, coords.y, 20, 20)
         })
       }
