@@ -90,14 +90,14 @@ function MetalDetector(Props) {
       }
       var ctx = dom.getContext("2d");
       ctx.clearRect(0, 0, dimensions.current.width, dimensions.current.height);
+      metals.forEach(function (metal) {
+            ctx.beginPath();
+            ctx.fillStyle = "white";
+            return ctx.fillRect(metal.x, metal.y, 20, 20);
+          });
       ctx.beginPath();
       ctx.arc(x$1, y$1 - 20 | 0, 20, 0, Math.imul(3, Math.PI | 0));
       ctx.stroke();
-      metals.forEach(function (metal) {
-            ctx.beginPath();
-            ctx.fillStyle = metal.color;
-            return ctx.fillRect(metal.x, metal.y, 20, 20);
-          });
       return ;
     }
     

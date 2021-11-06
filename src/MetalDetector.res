@@ -41,14 +41,14 @@ let make = () => {
     | Some(dom) => {
         let ctx = CanvasApi.getContext(dom, "2d")
         CanvasApi.clearRect(ctx, 0, 0, dimensions.current.width, dimensions.current.height)
+        Js.Array2.forEach(metals, metal => {
+          CanvasApi.beginPath(ctx)
+          ctx.fillStyle = "white" // Todo: assign color once detected
+          CanvasApi.fillRect(ctx, metal.x, metal.y, 20, 20)
+        })
         CanvasApi.beginPath(ctx)
         CanvasApi.arc(ctx, x, y - 20, 20, 0, 3 * Js.Math._PI->Belt.Float.toInt)
         CanvasApi.stroke(ctx)
-        Js.Array2.forEach(metals, metal => {
-          CanvasApi.beginPath(ctx)
-          ctx.fillStyle = metal.color
-          CanvasApi.fillRect(ctx, metal.x, metal.y, 20, 20)
-        })
       }
 
     | None => ()
