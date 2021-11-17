@@ -36,15 +36,16 @@ let make = () => {
     None
   })
 
-  let detect = (detectorX, detectorY) => {
+  let detect = (ctx, detectorX, detectorY) => {
     Js.Array2.forEach(metals, metal => {
       let distance = Js.Math.hypot(
         (detectorX - metal.x)->Belt.Int.toFloat,
         (detectorY - metal.y)->Belt.Int.toFloat,
       )
-      if distance < 60->Belt.Int.toFloat {
-        // TODO:  redraw metal with its color property
-        Js.log(distance)
+      if distance < 40->Belt.Int.toFloat {
+        CanvasApi.beginPath(ctx)
+        ctx.fillStyle = metal.color
+        CanvasApi.fillRect(ctx, metal.x, metal.y, 20, 20)
       }
     })
   }
@@ -61,7 +62,7 @@ let make = () => {
         CanvasApi.beginPath(ctx)
         CanvasApi.arc(ctx, x, y - 20, 20, 0, 3 * Js.Math._PI->Belt.Float.toInt)
         CanvasApi.stroke(ctx)
-        detect(x, y)
+        detect(ctx, x, y)
       }
 
     | None => ()

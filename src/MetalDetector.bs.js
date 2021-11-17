@@ -100,9 +100,10 @@ function MetalDetector(Props) {
       ctx.stroke();
       metals.forEach(function (metal) {
             var distance = Math.hypot(x$1 - metal.x | 0, y$1 - metal.y | 0);
-            if (distance < 60) {
-              console.log(distance);
-              return ;
+            if (distance < 40) {
+              ctx.beginPath();
+              ctx.fillStyle = metal.color;
+              return ctx.fillRect(metal.x, metal.y, 20, 20);
             }
             
           });
