@@ -56,6 +56,11 @@ function MetalDetector(Props) {
       });
   var setMetals = match$1[1];
   var metals = match$1[0];
+  var match$2 = React.useState(function () {
+        return [];
+      });
+  var setMetalsDetected = match$2[1];
+  var metalsDetected = match$2[0];
   React.useEffect((function () {
           tiles.forEach(function (rows) {
                 rows.forEach(function (param) {
@@ -101,6 +106,11 @@ function MetalDetector(Props) {
       metals.forEach(function (metal) {
             var distance = Math.hypot(x$1 - metal.x | 0, y$1 - metal.y | 0);
             if (distance < 40) {
+              if (!metalsDetected.includes(metal)) {
+                Curry._1(setMetalsDetected, (function (_prev) {
+                        return [metal].concat(metalsDetected);
+                      }));
+              }
               ctx.beginPath();
               ctx.fillStyle = metal.color;
               return ctx.fillRect(metal.x, metal.y, 20, 20);
@@ -111,7 +121,7 @@ function MetalDetector(Props) {
     }
     
   };
-  return React.createElement("div", undefined, React.createElement("h2", undefined, "metal detector game"), React.createElement(GameCanvas.make, {
+  return React.createElement("div", undefined, React.createElement("h2", undefined, "metal detector game"), React.createElement("div", undefined, "metals detected: ", metalsDetected.length), React.createElement(GameCanvas.make, {
                   width: dimensions.current.width,
                   height: dimensions.current.height,
                   canvasClassName: "metal-detector-canvas",

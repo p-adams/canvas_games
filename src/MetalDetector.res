@@ -15,6 +15,7 @@ let make = () => {
   let (mouseCoords, setMouseCoords) = React.useState(_ => {x: 0, y: 0})
   let dimensions = React.useRef({width: 600, height: 500})
   let (metals, setMetals) = React.useState(_ => [])
+  let (metalsDetected, setMetalsDetected) = React.useState(_ => [])
   React.useEffect0(() => {
     Js.Array2.forEach(tiles, rows => {
       Js.Array2.forEach(rows, _ => {
@@ -43,6 +44,9 @@ let make = () => {
         (detectorY - metal.y)->Belt.Int.toFloat,
       )
       if distance < 40->Belt.Int.toFloat {
+        if !Js.Array.includes(metal, metalsDetected) {
+          setMetalsDetected(_prev => Js.Array.concat(metalsDetected, [metal]))
+        }
         CanvasApi.beginPath(ctx)
         ctx.fillStyle = metal.color
         CanvasApi.fillRect(ctx, metal.x, metal.y, 20, 20)
@@ -83,6 +87,7 @@ let make = () => {
   }
   <div>
     <h2> {React.string("metal detector game")} </h2>
+    <div> {React.string("metals detected: ")} {React.int(Belt.Array.length(metalsDetected))} </div>
     <GameCanvas
       canvasRef={gameCanvasRef}
       width={dimensions.current.width}
