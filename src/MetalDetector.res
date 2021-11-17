@@ -60,7 +60,7 @@ let make = () => {
         CanvasApi.clearRect(ctx, 0, 0, dimensions.current.width, dimensions.current.height)
         Js.Array2.forEach(metals, metal => {
           CanvasApi.beginPath(ctx)
-          ctx.fillStyle = "white" // Todo: assign color once detected
+          ctx.fillStyle = "white"
           CanvasApi.fillRect(ctx, metal.x, metal.y, 20, 20)
         })
         CanvasApi.beginPath(ctx)
