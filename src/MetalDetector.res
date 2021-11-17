@@ -36,6 +36,18 @@ let make = () => {
     None
   })
 
+  let detect = (detectorX, detectorY) => {
+    Js.Array2.forEach(metals, metal => {
+      let distance = Js.Math.hypot(
+        (detectorX - metal.x)->Belt.Int.toFloat,
+        (detectorY - metal.y)->Belt.Int.toFloat,
+      )
+      if distance < 60->Belt.Int.toFloat {
+        // TODO:  redraw metal with its color property
+        Js.log(distance)
+      }
+    })
+  }
   let drawDetector = (x, y) => {
     switch gameCanvasRef.current->Js.Nullable.toOption {
     | Some(dom) => {
@@ -49,6 +61,7 @@ let make = () => {
         CanvasApi.beginPath(ctx)
         CanvasApi.arc(ctx, x, y - 20, 20, 0, 3 * Js.Math._PI->Belt.Float.toInt)
         CanvasApi.stroke(ctx)
+        detect(x, y)
       }
 
     | None => ()

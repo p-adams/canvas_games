@@ -98,6 +98,14 @@ function MetalDetector(Props) {
       ctx.beginPath();
       ctx.arc(x$1, y$1 - 20 | 0, 20, 0, Math.imul(3, Math.PI | 0));
       ctx.stroke();
+      metals.forEach(function (metal) {
+            var distance = Math.hypot(x$1 - metal.x | 0, y$1 - metal.y | 0);
+            if (distance < 60) {
+              console.log(distance);
+              return ;
+            }
+            
+          });
       return ;
     }
     
