@@ -37,6 +37,23 @@ function getRandomColor(param) {
   return Caml_array.get(colors, Js_math.random_int(0, colors.length));
 }
 
+function generateScore(color) {
+  switch (color) {
+    case "#173F5F" :
+        return 2;
+    case "#20639B" :
+        return 4;
+    case "#3CAEA3" :
+        return 6;
+    case "#ED553B" :
+        return 12;
+    case "#F6D55C" :
+        return 8;
+    default:
+      return -1;
+  }
+}
+
 function MetalDetector(Props) {
   var gameCanvasRef = React.useRef(null);
   var match = React.useState(function () {
@@ -64,12 +81,14 @@ function MetalDetector(Props) {
   React.useEffect((function () {
           tiles.forEach(function (rows) {
                 rows.forEach(function (param) {
+                      var color = getRandomColor(undefined);
                       return Curry._1(setMetals, (function (_prev) {
                                     return _prev.concat([{
                                                   x: Js_math.random_int(0, 600),
                                                   y: Js_math.random_int(0, 500),
-                                                  color: getRandomColor(undefined),
-                                                  detected: false
+                                                  color: color,
+                                                  detected: false,
+                                                  score: generateScore(color)
                                                 }]);
                                   }));
                     });
@@ -98,7 +117,8 @@ function MetalDetector(Props) {
       metals.forEach(function (metal) {
             ctx.beginPath();
             ctx.fillStyle = "white";
-            return ctx.fillRect(metal.x, metal.y, 20, 20);
+            ctx.fillRect(metal.x, metal.y, 20, 20);
+            
           });
       ctx.beginPath();
       ctx.arc(x$1, y$1 - 20 | 0, 20, 0, Math.imul(3, Math.PI | 0));
@@ -113,7 +133,9 @@ function MetalDetector(Props) {
               }
               ctx.beginPath();
               ctx.fillStyle = metal.color;
-              return ctx.fillRect(metal.x, metal.y, 20, 20);
+              ctx.fillRect(metal.x, metal.y, 20, 20);
+              ctx.font = "10px Avenir, Helvetica, Arial, sans-serif";
+              return ctx.fillText("POINTS: " + String(metal.score), metal.x, metal.y - 4 | 0);
             }
             
           });
@@ -136,6 +158,7 @@ export {
   tiles ,
   getRandomInt ,
   getRandomColor ,
+  generateScore ,
   make ,
   
 }

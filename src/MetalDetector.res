@@ -1,6 +1,6 @@
 type coords = {x: int, y: int}
 type canvasDimensions = {width: int, height: int}
-type metal = {x: int, y: int, color: string, detected: bool}
+type metal = {x: int, y: int, color: string, detected: bool, score: int}
 let tiles = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 let getRandomInt = (min, max) => {
   Js.Math.random_int(min, max)
@@ -8,6 +8,17 @@ let getRandomInt = (min, max) => {
 let getRandomColor = () => {
   let colors = ["#173F5F", "#20639B", "#3CAEA3", "#F6D55C", "#ED553B"]
   colors[Js.Math.random_int(0, Belt.Array.length(colors))]
+}
+// generate score based on color
+let generateScore = color => {
+  switch color {
+  | "#173F5F" => 2
+  | "#20639B" => 4
+  | "#3CAEA3" => 6
+  | "#F6D55C" => 8
+  | "#ED553B" => 12
+  | _ => -1
+  }
 }
 @react.component
 let make = () => {
@@ -19,6 +30,7 @@ let make = () => {
   React.useEffect0(() => {
     Js.Array2.forEach(tiles, rows => {
       Js.Array2.forEach(rows, _ => {
+        let color = getRandomColor()
         setMetals(_prev =>
           Js.Array2.concat(
             _prev,
@@ -26,8 +38,9 @@ let make = () => {
               {
                 x: getRandomInt(0, 600),
                 y: getRandomInt(0, 500),
-                color: getRandomColor(),
+                color: color,
                 detected: false,
+                score: generateScore(color),
               },
             ],
           )
@@ -50,6 +63,8 @@ let make = () => {
         CanvasApi.beginPath(ctx)
         ctx.fillStyle = metal.color
         CanvasApi.fillRect(ctx, metal.x, metal.y, 20, 20)
+        ctx.font = "10px Avenir, Helvetica, Arial, sans-serif"
+        CanvasApi.fillText(ctx, `POINTS: ${metal.score->Belt.Int.toString}`, metal.x, metal.y - 4)
       }
     })
   }
