@@ -23,11 +23,16 @@ let generateScore = color => {
 @react.component
 let make = () => {
   let gameCanvasRef = React.useRef(Js.Nullable.null)
+  let (ctx, setCtx) = React.useState(_ => {CanvasApi.fillStyle: "", CanvasApi.font: ""})
   let (mouseCoords, setMouseCoords) = React.useState(_ => {x: 0, y: 0})
   let dimensions = React.useRef({width: 600, height: 500})
   let (metals, setMetals) = React.useState(_ => [])
   let (metalsDetected, setMetalsDetected) = React.useState(_ => [])
   React.useEffect0(() => {
+    switch gameCanvasRef.current->Js.Nullable.toOption {
+    | Some(dom) => setCtx(_prev => CanvasApi.getContext(dom, "2d"))
+    | None => ()
+    }
     Js.Array2.forEach(tiles, rows => {
       Js.Array2.forEach(rows, _ => {
         let color = getRandomColor()
@@ -106,6 +111,7 @@ let make = () => {
     let y = ReactEvent.Mouse.clientY(e)
     Js.log(x)
     Js.log(y)
+    Js.log(ctx)
   }
   <div>
     <h2> {React.string("metal detector game")} </h2>
