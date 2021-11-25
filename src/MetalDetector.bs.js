@@ -143,12 +143,20 @@ function MetalDetector(Props) {
     }
     
   };
+  var onClick = function (e) {
+    var x = e.clientX;
+    var y = e.clientY;
+    console.log(x);
+    console.log(y);
+    
+  };
   return React.createElement("div", undefined, React.createElement("h2", undefined, "metal detector game"), React.createElement("div", undefined, "metals detected: ", metalsDetected.length), React.createElement(GameCanvas.make, {
                   width: dimensions.current.width,
                   height: dimensions.current.height,
                   canvasClassName: "metal-detector-canvas",
                   canvasRef: gameCanvasRef,
-                  onMouseMove: onMouseMove
+                  onMouseMove: onMouseMove,
+                  onClick: onClick
                 }));
 }
 

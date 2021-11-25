@@ -8,11 +8,13 @@ function GameCanvas(Props) {
   var canvasClassName = Props.canvasClassName;
   var canvasRef = Props.canvasRef;
   var onMouseMove = Props.onMouseMove;
+  var onClick = Props.onClick;
   return React.createElement("canvas", {
               ref: canvasRef,
               className: "game-canvas " + canvasClassName,
               height: String(height),
               width: String(width),
+              onClick: onClick,
               onMouseMove: onMouseMove
             });
 }

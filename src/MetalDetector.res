@@ -100,6 +100,13 @@ let make = () => {
       drawDetector(mouseCoords.x, mouseCoords.y)
     }
   }
+  // click on metal to pick up
+  let onClick = e => {
+    let x = ReactEvent.Mouse.clientX(e)
+    let y = ReactEvent.Mouse.clientY(e)
+    Js.log(x)
+    Js.log(y)
+  }
   <div>
     <h2> {React.string("metal detector game")} </h2>
     <div> {React.string("metals detected: ")} {React.int(Belt.Array.length(metalsDetected))} </div>
@@ -109,6 +116,7 @@ let make = () => {
       height={dimensions.current.height}
       canvasClassName="metal-detector-canvas"
       onMouseMove={onMouseMove}
+      onClick={onClick}
     />
   </div>
 }
