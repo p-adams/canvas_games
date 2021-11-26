@@ -56,13 +56,18 @@ let make = () => {
     None
   })
 
-  let detect = (ctx, detectorX, detectorY) => {
-    Js.Array2.forEach(metals, metal => {
-      let distance = Js.Math.hypot(
-        (detectorX - metal.x)->Belt.Int.toFloat,
-        (detectorY - metal.y)->Belt.Int.toFloat,
+  let distance = (x, y, metal) => {
+    Js.Math.hypot(
+        (x - metal.x)->Belt.Int.toFloat,
+        (y - metal.y)->Belt.Int.toFloat,
       )
-      if distance < detectionOffest->Belt.Int.toFloat {
+  }
+
+ 
+  let detect = (ctx, detectorX, detectorY) => {
+  
+    Js.Array2.forEach(metals, metal => {
+      if distance(detectorX, detectorY, metal) < detectionOffest->Belt.Int.toFloat {
         if !Js.Array.includes(metal, metalsDetected) {
           setMetalsDetected(_prev => Js.Array.concat(metalsDetected, [metal]))
         }
@@ -77,7 +82,7 @@ let make = () => {
   }
   let drawDetector = (x, y) => {
     switch gameCanvasRef.current->Js.Nullable.toOption {
-    | Some(dom) => {
+    | Some(_) => {
         CanvasApi.clearRect(ctx, 0, 0, dimensions.current.width, dimensions.current.height)
         Js.Array2.forEach(metals, metal => {
           CanvasApi.beginPath(ctx)
@@ -95,7 +100,7 @@ let make = () => {
     | None => ()
     }
   }
-
+  // TODO: extract to reusable hook to be used across games
   let onMouseMove = e => {
     let x = ReactEvent.Mouse.clientX(e)
     let y = ReactEvent.Mouse.clientY(e)
@@ -109,13 +114,9 @@ let make = () => {
     }
   }
   // click on metal to pick up
-  let onClick = _ => {
+  let pickUp = _ => {
     Js.Array2.forEach(metals, metal => {
-      let distance = Js.Math.hypot(
-        (mouseCoords.x - metal.x)->Belt.Int.toFloat,
-        (mouseCoords.y - metal.y)->Belt.Int.toFloat,
-      )
-      if distance < detectionOffest->Belt.Int.toFloat {
+      if distance(mouseCoords.x, mouseCoords.y, metal) < detectionOffest->Belt.Int.toFloat {
         Js.log("pick up metal")
       }
     })
@@ -129,7 +130,7 @@ let make = () => {
       height={dimensions.current.height}
       canvasClassName="metal-detector-canvas"
       onMouseMove={onMouseMove}
-      onClick={onClick}
+      onClick={pickUp}
     />
   </div>
 }

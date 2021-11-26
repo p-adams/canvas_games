@@ -110,6 +110,9 @@ function MetalDetector(Props) {
               });
           
         }), []);
+  var distance = function (x, y, metal) {
+    return Math.hypot(x - metal.x | 0, y - metal.y | 0);
+  };
   var onMouseMove = function (e) {
     var x = e.clientX;
     var y = e.clientY;
@@ -122,8 +125,8 @@ function MetalDetector(Props) {
     if (mouseCoords.x > 0 && mouseCoords.y > 0) {
       var x$1 = mouseCoords.x;
       var y$1 = mouseCoords.y;
-      var dom = gameCanvasRef.current;
-      if (!(dom == null)) {
+      var match = gameCanvasRef.current;
+      if (!(match == null)) {
         ctx.clearRect(0, 0, dimensions.current.width, dimensions.current.height);
         metals.forEach(function (metal) {
               ctx.beginPath();
@@ -137,8 +140,7 @@ function MetalDetector(Props) {
         ctx.stroke();
         ctx.closePath();
         metals.forEach(function (metal) {
-              var distance = Math.hypot(x$1 - metal.x | 0, y$1 - metal.y | 0);
-              if (distance < 40) {
+              if (distance(x$1, y$1, metal) < 40) {
                 if (!metalsDetected.includes(metal)) {
                   Curry._1(setMetalsDetected, (function (_prev) {
                           return [metal].concat(metalsDetected);
@@ -161,10 +163,9 @@ function MetalDetector(Props) {
     }
     
   };
-  var onClick = function (param) {
+  var pickUp = function (param) {
     metals.forEach(function (metal) {
-          var distance = Math.hypot(mouseCoords.x - metal.x | 0, mouseCoords.y - metal.y | 0);
-          if (distance < 40) {
+          if (distance(mouseCoords.x, mouseCoords.y, metal) < 40) {
             console.log("pick up metal");
             return ;
           }
@@ -178,7 +179,7 @@ function MetalDetector(Props) {
                   canvasClassName: "metal-detector-canvas",
                   canvasRef: gameCanvasRef,
                   onMouseMove: onMouseMove,
-                  onClick: onClick
+                  onClick: pickUp
                 }));
 }
 
