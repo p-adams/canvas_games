@@ -123,46 +123,53 @@ function MetalDetector(Props) {
       var x$1 = mouseCoords.x;
       var y$1 = mouseCoords.y;
       var dom = gameCanvasRef.current;
-      if (dom == null) {
+      if (!(dom == null)) {
+        ctx.clearRect(0, 0, dimensions.current.width, dimensions.current.height);
+        metals.forEach(function (metal) {
+              ctx.beginPath();
+              ctx.fillStyle = "white";
+              ctx.fillRect(metal.x, metal.y, 20, 20);
+              ctx.closePath();
+              
+            });
+        ctx.beginPath();
+        ctx.arc(x$1, y$1 - 20 | 0, 20, 0, Math.imul(3, Math.PI | 0));
+        ctx.stroke();
+        ctx.closePath();
+        metals.forEach(function (metal) {
+              var distance = Math.hypot(x$1 - metal.x | 0, y$1 - metal.y | 0);
+              if (distance < 40) {
+                if (!metalsDetected.includes(metal)) {
+                  Curry._1(setMetalsDetected, (function (_prev) {
+                          return [metal].concat(metalsDetected);
+                        }));
+                }
+                ctx.beginPath();
+                ctx.fillStyle = metal.color;
+                ctx.fillRect(metal.x, metal.y, 20, 20);
+                ctx.font = "10px Avenir, Helvetica, Arial, sans-serif";
+                ctx.fillText("POINTS: " + String(metal.score), metal.x, metal.y - 4 | 0);
+                ctx.closePath();
+                return ;
+              }
+              
+            });
+        return ;
+      } else {
         return ;
       }
-      var ctx = dom.getContext("2d");
-      ctx.clearRect(0, 0, dimensions.current.width, dimensions.current.height);
-      metals.forEach(function (metal) {
-            ctx.beginPath();
-            ctx.fillStyle = "white";
-            ctx.fillRect(metal.x, metal.y, 20, 20);
-            
-          });
-      ctx.beginPath();
-      ctx.arc(x$1, y$1 - 20 | 0, 20, 0, Math.imul(3, Math.PI | 0));
-      ctx.stroke();
-      metals.forEach(function (metal) {
-            var distance = Math.hypot(x$1 - metal.x | 0, y$1 - metal.y | 0);
-            if (distance < 40) {
-              if (!metalsDetected.includes(metal)) {
-                Curry._1(setMetalsDetected, (function (_prev) {
-                        return [metal].concat(metalsDetected);
-                      }));
-              }
-              ctx.beginPath();
-              ctx.fillStyle = metal.color;
-              ctx.fillRect(metal.x, metal.y, 20, 20);
-              ctx.font = "10px Avenir, Helvetica, Arial, sans-serif";
-              return ctx.fillText("POINTS: " + String(metal.score), metal.x, metal.y - 4 | 0);
-            }
-            
-          });
-      return ;
     }
     
   };
-  var onClick = function (e) {
-    var x = e.clientX;
-    var y = e.clientY;
-    console.log(x);
-    console.log(y);
-    console.log(ctx);
+  var onClick = function (param) {
+    metals.forEach(function (metal) {
+          var distance = Math.hypot(mouseCoords.x - metal.x | 0, mouseCoords.y - metal.y | 0);
+          if (distance < 40) {
+            console.log("pick up metal");
+            return ;
+          }
+          
+        });
     
   };
   return React.createElement("div", undefined, React.createElement("h2", undefined, "metal detector game"), React.createElement("div", undefined, "metals detected: ", metalsDetected.length), React.createElement(GameCanvas.make, {
@@ -175,9 +182,12 @@ function MetalDetector(Props) {
                 }));
 }
 
+var detectionOffest = 40;
+
 var make = MetalDetector;
 
 export {
+  detectionOffest ,
   tiles ,
   getRandomInt ,
   getRandomColor ,

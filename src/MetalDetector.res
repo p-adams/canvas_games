@@ -1,6 +1,7 @@
 type coords = {x: int, y: int}
 type canvasDimensions = {width: int, height: int}
 type metal = {x: int, y: int, color: string, detected: bool, score: int}
+let detectionOffest = 40
 let tiles = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 let getRandomInt = (min, max) => {
   Js.Math.random_int(min, max)
@@ -61,7 +62,7 @@ let make = () => {
         (detectorX - metal.x)->Belt.Int.toFloat,
         (detectorY - metal.y)->Belt.Int.toFloat,
       )
-      if distance < 40->Belt.Int.toFloat {
+      if distance < detectionOffest->Belt.Int.toFloat {
         if !Js.Array.includes(metal, metalsDetected) {
           setMetalsDetected(_prev => Js.Array.concat(metalsDetected, [metal]))
         }
@@ -70,22 +71,24 @@ let make = () => {
         CanvasApi.fillRect(ctx, metal.x, metal.y, 20, 20)
         ctx.font = "10px Avenir, Helvetica, Arial, sans-serif"
         CanvasApi.fillText(ctx, `POINTS: ${metal.score->Belt.Int.toString}`, metal.x, metal.y - 4)
+        CanvasApi.closePath(ctx)
       }
     })
   }
   let drawDetector = (x, y) => {
     switch gameCanvasRef.current->Js.Nullable.toOption {
     | Some(dom) => {
-        let ctx = CanvasApi.getContext(dom, "2d")
         CanvasApi.clearRect(ctx, 0, 0, dimensions.current.width, dimensions.current.height)
         Js.Array2.forEach(metals, metal => {
           CanvasApi.beginPath(ctx)
           ctx.fillStyle = "white"
           CanvasApi.fillRect(ctx, metal.x, metal.y, 20, 20)
+          CanvasApi.closePath(ctx)
         })
         CanvasApi.beginPath(ctx)
         CanvasApi.arc(ctx, x, y - 20, 20, 0, 3 * Js.Math._PI->Belt.Float.toInt)
         CanvasApi.stroke(ctx)
+        CanvasApi.closePath(ctx)
         detect(ctx, x, y)
       }
 
@@ -106,12 +109,16 @@ let make = () => {
     }
   }
   // click on metal to pick up
-  let onClick = e => {
-    let x = ReactEvent.Mouse.clientX(e)
-    let y = ReactEvent.Mouse.clientY(e)
-    Js.log(x)
-    Js.log(y)
-    Js.log(ctx)
+  let onClick = _ => {
+    Js.Array2.forEach(metals, metal => {
+      let distance = Js.Math.hypot(
+        (mouseCoords.x - metal.x)->Belt.Int.toFloat,
+        (mouseCoords.y - metal.y)->Belt.Int.toFloat,
+      )
+      if distance < detectionOffest->Belt.Int.toFloat {
+        Js.log("pick up metal")
+      }
+    })
   }
   <div>
     <h2> {React.string("metal detector game")} </h2>
