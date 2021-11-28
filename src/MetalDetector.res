@@ -32,7 +32,7 @@ let make = () => {
   let (metalsDetected, setMetalsDetected) = React.useState(_ => [])
   React.useEffect0(() => {
     switch gameCanvasRef.current->Js.Nullable.toOption {
-    | Some(dom) => setCtx(_prev =>CanvasApi.getContext(dom, "2d"))
+    | Some(dom) => setCtx(_prev => CanvasApi.getContext(dom, "2d"))
     | None => ()
     }
     Js.Array2.forEach(tiles, rows => {
@@ -58,15 +58,10 @@ let make = () => {
   })
 
   let distance = (x, y, metal) => {
-    Js.Math.hypot(
-        (x - metal.x)->Belt.Int.toFloat,
-        (y - metal.y)->Belt.Int.toFloat,
-      )
+    Js.Math.hypot((x - metal.x)->Belt.Int.toFloat, (y - metal.y)->Belt.Int.toFloat)
   }
 
- 
   let detect = (ctx, detectorX, detectorY) => {
-  
     Js.Array2.forEach(metals, metal => {
       if distance(detectorX, detectorY, metal) < detectionOffest->Belt.Int.toFloat {
         if !Js.Array.includes(metal, metalsDetected) {
