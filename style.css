@@ -17,4 +17,5 @@ h3 {
 
 .game-canvas.metal-detector-canvas {
   border: 1px solid lightgray;
+  background-color: #e5d3b3;
 }

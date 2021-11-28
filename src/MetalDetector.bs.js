@@ -6,6 +6,8 @@ import * as Js_math from "../node_modules/rescript/lib/es6/js_math.js";
 import * as Caml_array from "../node_modules/rescript/lib/es6/caml_array.js";
 import * as GameCanvas from "./GameCanvas.bs.js";
 
+var backgroundColor = "#e5d3b3";
+
 var tiles = [
   [
     0,
@@ -130,7 +132,7 @@ function MetalDetector(Props) {
         ctx.clearRect(0, 0, dimensions.current.width, dimensions.current.height);
         metals.forEach(function (metal) {
               ctx.beginPath();
-              ctx.fillStyle = "white";
+              ctx.fillStyle = backgroundColor;
               ctx.fillRect(metal.x, metal.y, 20, 20);
               ctx.closePath();
               
@@ -188,6 +190,7 @@ var detectionOffest = 40;
 var make = MetalDetector;
 
 export {
+  backgroundColor ,
   detectionOffest ,
   tiles ,
   getRandomInt ,

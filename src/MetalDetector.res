@@ -1,6 +1,7 @@
 type coords = {x: int, y: int}
 type canvasDimensions = {width: int, height: int}
 type metal = {x: int, y: int, color: string, detected: bool, score: int}
+let backgroundColor = "#e5d3b3"
 let detectionOffest = 40
 let tiles = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 let getRandomInt = (min, max) => {
@@ -31,7 +32,7 @@ let make = () => {
   let (metalsDetected, setMetalsDetected) = React.useState(_ => [])
   React.useEffect0(() => {
     switch gameCanvasRef.current->Js.Nullable.toOption {
-    | Some(dom) => setCtx(_prev => CanvasApi.getContext(dom, "2d"))
+    | Some(dom) => setCtx(_prev =>CanvasApi.getContext(dom, "2d"))
     | None => ()
     }
     Js.Array2.forEach(tiles, rows => {
@@ -86,7 +87,7 @@ let make = () => {
         CanvasApi.clearRect(ctx, 0, 0, dimensions.current.width, dimensions.current.height)
         Js.Array2.forEach(metals, metal => {
           CanvasApi.beginPath(ctx)
-          ctx.fillStyle = "white"
+          ctx.fillStyle = backgroundColor
           CanvasApi.fillRect(ctx, metal.x, metal.y, 20, 20)
           CanvasApi.closePath(ctx)
         })
