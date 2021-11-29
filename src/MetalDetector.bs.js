@@ -8,6 +8,8 @@ import * as GameCanvas from "./GameCanvas.bs.js";
 
 var backgroundColor = "#e5d3b3";
 
+var detectorColor = "#212121";
+
 var tiles = [
   [
     0,
@@ -61,7 +63,8 @@ function MetalDetector(Props) {
   var match = React.useState(function () {
         return {
                 fillStyle: "",
-                font: ""
+                font: "",
+                strokeStyle: ""
               };
       });
   var setCtx = match[1];
@@ -138,8 +141,9 @@ function MetalDetector(Props) {
               
             });
         ctx.beginPath();
+        ctx.fillStyle = detectorColor;
         ctx.arc(x$1, y$1 - 20 | 0, 20, 0, Math.imul(3, Math.PI | 0));
-        ctx.stroke();
+        ctx.fill();
         ctx.closePath();
         metals.forEach(function (metal) {
               if (distance(x$1, y$1, metal) < 40) {
@@ -191,6 +195,7 @@ var make = MetalDetector;
 
 export {
   backgroundColor ,
+  detectorColor ,
   detectionOffest ,
   tiles ,
   getRandomInt ,

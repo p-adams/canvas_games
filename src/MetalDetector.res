@@ -2,6 +2,7 @@ type coords = {x: int, y: int}
 type canvasDimensions = {width: int, height: int}
 type metal = {x: int, y: int, color: string, detected: bool, score: int}
 let backgroundColor = "#e5d3b3"
+let detectorColor = "#212121"
 let detectionOffest = 40
 let tiles = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 let getRandomInt = (min, max) => {
@@ -25,7 +26,11 @@ let generateScore = color => {
 @react.component
 let make = () => {
   let gameCanvasRef = React.useRef(Js.Nullable.null)
-  let (ctx, setCtx) = React.useState(_ => {CanvasApi.fillStyle: "", CanvasApi.font: ""})
+  let (ctx, setCtx) = React.useState(_ => {
+    CanvasApi.fillStyle: "",
+    CanvasApi.font: "",
+    CanvasApi.strokeStyle: "",
+  })
   let (mouseCoords, setMouseCoords) = React.useState(_ => {x: 0, y: 0})
   let dimensions = React.useRef({width: 600, height: 500})
   let (metals, setMetals) = React.useState(_ => [])
@@ -64,6 +69,7 @@ let make = () => {
   let detect = (ctx, detectorX, detectorY) => {
     Js.Array2.forEach(metals, metal => {
       if distance(detectorX, detectorY, metal) < detectionOffest->Belt.Int.toFloat {
+        // add metal to list of detected metals
         if !Js.Array.includes(metal, metalsDetected) {
           setMetalsDetected(_prev => Js.Array.concat(metalsDetected, [metal]))
         }
@@ -87,8 +93,9 @@ let make = () => {
           CanvasApi.closePath(ctx)
         })
         CanvasApi.beginPath(ctx)
+        ctx.fillStyle = detectorColor
         CanvasApi.arc(ctx, x, y - 20, 20, 0, 3 * Js.Math._PI->Belt.Float.toInt)
-        CanvasApi.stroke(ctx)
+        CanvasApi.fill(ctx)
         CanvasApi.closePath(ctx)
         detect(ctx, x, y)
       }
