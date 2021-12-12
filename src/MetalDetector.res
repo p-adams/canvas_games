@@ -66,6 +66,14 @@ let make = () => {
     Js.Math.hypot((x - metal.x)->Belt.Int.toFloat, (y - metal.y)->Belt.Int.toFloat)
   }
 
+  let createDetector = (x, y, color) => {
+    CanvasApi.beginPath(ctx)
+    ctx.fillStyle = color
+    CanvasApi.arc(ctx, x, y - 20, 20, 0, 3 * Js.Math._PI->Belt.Float.toInt)
+    CanvasApi.fill(ctx)
+    CanvasApi.closePath(ctx)
+  }
+
   let detect = (ctx, detectorX, detectorY) => {
     Js.Array2.forEach(metals, metal => {
       if distance(detectorX, detectorY, metal) < detectionOffest->Belt.Int.toFloat {
@@ -79,6 +87,8 @@ let make = () => {
         ctx.font = "10px Avenir, Helvetica, Arial, sans-serif"
         CanvasApi.fillText(ctx, `POINTS: ${metal.score->Belt.Int.toString}`, metal.x, metal.y - 4)
         CanvasApi.closePath(ctx)
+        // redraw detector
+        createDetector(detectorX, detectorY, "red")
       }
     })
   }
@@ -120,6 +130,7 @@ let make = () => {
   let pickUp = _ => {
     Js.Array2.forEach(metals, metal => {
       if distance(mouseCoords.x, mouseCoords.y, metal) < detectionOffest->Belt.Int.toFloat {
+        // display metal on canvas with its point value and then remove metal from canvas and add points to running score
         Js.log("pick up metal")
       }
     })

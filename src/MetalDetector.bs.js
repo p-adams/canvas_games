@@ -158,6 +158,12 @@ function MetalDetector(Props) {
                 ctx.font = "10px Avenir, Helvetica, Arial, sans-serif";
                 ctx.fillText("POINTS: " + String(metal.score), metal.x, metal.y - 4 | 0);
                 ctx.closePath();
+                var color = "red";
+                ctx.beginPath();
+                ctx.fillStyle = color;
+                ctx.arc(x$1, y$1 - 20 | 0, 20, 0, Math.imul(3, Math.PI | 0));
+                ctx.fill();
+                ctx.closePath();
                 return ;
               }
               
