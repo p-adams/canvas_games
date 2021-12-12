@@ -76,6 +76,9 @@ let make = () => {
 
   let detect = (ctx, detectorX, detectorY) => {
     Js.Array2.forEach(metals, metal => {
+      // TODO: account for different distances.
+      // less than detectionOffset: metal detector is within pick up range of object
+      // less than detectionOffset + 40px (TBD): metal detector is within detection range but cannot pick up object
       if distance(detectorX, detectorY, metal) < detectionOffest->Belt.Int.toFloat {
         // add metal to list of detected metals
         if !Js.Array.includes(metal, metalsDetected) {
