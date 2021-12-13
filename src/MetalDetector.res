@@ -1,10 +1,10 @@
 type coords = {x: int, y: int}
 type canvasDimensions = {width: int, height: int}
-type metal = {x: int, y: int, color: string, detected: bool, score: int}
+type metal = {id: int, x: int, y: int, color: string, detected: bool, score: int}
 let backgroundColor = "#e5d3b3"
 let detectorColor = "#212121"
 let detectionOffest = 40
-let tiles = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+let metalsOnCanvas = 9
 let getRandomInt = (min, max) => {
   Js.Math.random_int(min, max)
 }
@@ -35,30 +35,31 @@ let make = () => {
   let dimensions = React.useRef({width: 600, height: 500})
   let (metals, setMetals) = React.useState(_ => [])
   let (metalsDetected, setMetalsDetected) = React.useState(_ => [])
+  let (metalsPickedUp, setMetalsPickedUp) = React.useState(_ => 0)
+  let timer = ref(Js.Nullable.null)
   React.useEffect0(() => {
     switch gameCanvasRef.current->Js.Nullable.toOption {
     | Some(dom) => setCtx(_prev => CanvasApi.getContext(dom, "2d"))
     | None => ()
     }
-    Js.Array2.forEach(tiles, rows => {
-      Js.Array2.forEach(rows, _ => {
-        let color = getRandomColor()
-        setMetals(_prev =>
-          Js.Array2.concat(
-            _prev,
-            [
-              {
-                x: getRandomInt(0, 600),
-                y: getRandomInt(0, 500),
-                color: color,
-                detected: false,
-                score: generateScore(color),
-              },
-            ],
-          )
+    for i in 0 to metalsOnCanvas {
+      let color = getRandomColor()
+      setMetals(_prev =>
+        Js.Array2.concat(
+          _prev,
+          [
+            {
+              id: i,
+              x: getRandomInt(0, 600),
+              y: getRandomInt(0, 500),
+              color: color,
+              detected: false,
+              score: generateScore(color),
+            },
+          ],
         )
-      })
-    })
+      )
+    }
     None
   })
 
@@ -99,6 +100,7 @@ let make = () => {
       } else if distance(x, y, metal) < (detectionOffest + 40)->Belt.Int.toFloat {
         // detector is near pick up range
         drawDetector(x, y, "yellow")
+        Js.log(metal.id)
       }
     })
   }
@@ -132,18 +134,36 @@ let make = () => {
       combCanvas(mouseCoords.x, mouseCoords.y)
     }
   }
+
+  let pick = id => {
+    setMetals(_prev =>
+      Js.Array2.filter(metals, metal => {
+        metal.id !== id
+      })
+    )
+    setMetalsPickedUp(prev => prev + 1)
+  }
+
   // click on metal to pick up
   let pickUp = _ => {
     Js.Array2.forEach(metals, metal => {
       if distance(mouseCoords.x, mouseCoords.y, metal) < detectionOffest->Belt.Int.toFloat {
         // display metal on canvas with its point value and then remove metal from canvas and add points to running score
         drawMetal(metal, metal.color, true)
+
+        timer := Js.Nullable.return(Js.Global.setTimeout(() => pick(metal.id), 1000))
       }
     })
   }
   <div>
     <h2> {React.string("metal detector game")} </h2>
     <div> {React.string("metals detected: ")} {React.int(Belt.Array.length(metalsDetected))} </div>
+    <div>
+      {React.string("metals picked up: ")}
+      {React.string(metalsPickedUp->Belt.Int.toString)}
+      {React.string("/")}
+      {React.string(metalsOnCanvas->Belt.Int.toString)}
+    </div>
     <GameCanvas
       canvasRef={gameCanvasRef}
       width={dimensions.current.width}
