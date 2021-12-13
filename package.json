@@ -1,5 +1,5 @@
 {
-  "name": "canvasgames",
+  "name": "metal_detector_canvas_game",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite & rescript build -w",
