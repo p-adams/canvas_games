@@ -66,7 +66,7 @@ let make = () => {
     Js.Math.hypot((x - metal.x)->Belt.Int.toFloat, (y - metal.y)->Belt.Int.toFloat)
   }
 
-  let createDetector = (x, y, color) => {
+  let drawDetector = (x, y, color) => {
     CanvasApi.beginPath(ctx)
     ctx.fillStyle = color
     CanvasApi.arc(ctx, x, y - 20, 20, 0, 3 * Js.Math._PI->Belt.Float.toInt)
@@ -74,7 +74,19 @@ let make = () => {
     CanvasApi.closePath(ctx)
   }
 
-  let detect = (ctx, detectorX, detectorY) => {
+  let drawMetal = (metal, color, withPointText) => {
+    CanvasApi.beginPath(ctx)
+    ctx.fillStyle = color
+    CanvasApi.fillRect(ctx, metal.x, metal.y, 20, 20)
+
+    if withPointText {
+      ctx.font = "10px Avenir, Helvetica, Arial, sans-serif"
+      CanvasApi.fillText(ctx, `POINTS: ${metal.score->Belt.Int.toString}`, metal.x, metal.y - 4)
+    }
+    CanvasApi.closePath(ctx)
+  }
+
+  let detect = (detectorX, detectorY) => {
     Js.Array2.forEach(metals, metal => {
       // TODO: account for different distances.
       // less than detectionOffset: metal detector is within pick up range of object
@@ -84,33 +96,25 @@ let make = () => {
         if !Js.Array.includes(metal, metalsDetected) {
           setMetalsDetected(_prev => Js.Array.concat(metalsDetected, [metal]))
         }
-        CanvasApi.beginPath(ctx)
-        ctx.fillStyle = metal.color
-        CanvasApi.fillRect(ctx, metal.x, metal.y, 20, 20)
-        ctx.font = "10px Avenir, Helvetica, Arial, sans-serif"
-        CanvasApi.fillText(ctx, `POINTS: ${metal.score->Belt.Int.toString}`, metal.x, metal.y - 4)
-        CanvasApi.closePath(ctx)
+
+        // redraw metal with point text
+        drawMetal(metal, metal.color, true)
         // redraw detector
-        createDetector(detectorX, detectorY, "red")
+        drawDetector(detectorX, detectorY, "red")
       }
     })
   }
-  let drawDetector = (x, y) => {
+  let combCanvas = (x, y) => {
     switch gameCanvasRef.current->Js.Nullable.toOption {
     | Some(_) => {
         CanvasApi.clearRect(ctx, 0, 0, dimensions.current.width, dimensions.current.height)
+        // render metal objects
         Js.Array2.forEach(metals, metal => {
-          CanvasApi.beginPath(ctx)
-          ctx.fillStyle = backgroundColor
-          CanvasApi.fillRect(ctx, metal.x, metal.y, 20, 20)
-          CanvasApi.closePath(ctx)
+          drawMetal(metal, backgroundColor, false)
         })
-        CanvasApi.beginPath(ctx)
-        ctx.fillStyle = detectorColor
-        CanvasApi.arc(ctx, x, y - 20, 20, 0, 3 * Js.Math._PI->Belt.Float.toInt)
-        CanvasApi.fill(ctx)
-        CanvasApi.closePath(ctx)
-        detect(ctx, x, y)
+        // render metal detector
+        drawDetector(x, y, detectorColor)
+        detect(x, y)
       }
 
     | None => ()
@@ -126,7 +130,7 @@ let make = () => {
       y: y - ReactEvent.Mouse.target(e)["offsetTop"],
     })
     if mouseCoords.x > 0 && mouseCoords.y > 0 {
-      drawDetector(mouseCoords.x, mouseCoords.y)
+      combCanvas(mouseCoords.x, mouseCoords.y)
     }
   }
   // click on metal to pick up

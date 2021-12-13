@@ -118,6 +118,25 @@ function MetalDetector(Props) {
   var distance = function (x, y, metal) {
     return Math.hypot(x - metal.x | 0, y - metal.y | 0);
   };
+  var drawDetector = function (x, y, color) {
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.arc(x, y - 20 | 0, 20, 0, Math.imul(3, Math.PI | 0));
+    ctx.fill();
+    ctx.closePath();
+    
+  };
+  var drawMetal = function (metal, color, withPointText) {
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.fillRect(metal.x, metal.y, 20, 20);
+    if (withPointText) {
+      ctx.font = "10px Avenir, Helvetica, Arial, sans-serif";
+      ctx.fillText("POINTS: " + String(metal.score), metal.x, metal.y - 4 | 0);
+    }
+    ctx.closePath();
+    
+  };
   var onMouseMove = function (e) {
     var x = e.clientX;
     var y = e.clientY;
@@ -134,17 +153,9 @@ function MetalDetector(Props) {
       if (!(match == null)) {
         ctx.clearRect(0, 0, dimensions.current.width, dimensions.current.height);
         metals.forEach(function (metal) {
-              ctx.beginPath();
-              ctx.fillStyle = backgroundColor;
-              ctx.fillRect(metal.x, metal.y, 20, 20);
-              ctx.closePath();
-              
+              return drawMetal(metal, backgroundColor, false);
             });
-        ctx.beginPath();
-        ctx.fillStyle = detectorColor;
-        ctx.arc(x$1, y$1 - 20 | 0, 20, 0, Math.imul(3, Math.PI | 0));
-        ctx.fill();
-        ctx.closePath();
+        drawDetector(x$1, y$1, detectorColor);
         metals.forEach(function (metal) {
               if (distance(x$1, y$1, metal) < 40) {
                 if (!metalsDetected.includes(metal)) {
@@ -152,19 +163,8 @@ function MetalDetector(Props) {
                           return [metal].concat(metalsDetected);
                         }));
                 }
-                ctx.beginPath();
-                ctx.fillStyle = metal.color;
-                ctx.fillRect(metal.x, metal.y, 20, 20);
-                ctx.font = "10px Avenir, Helvetica, Arial, sans-serif";
-                ctx.fillText("POINTS: " + String(metal.score), metal.x, metal.y - 4 | 0);
-                ctx.closePath();
-                var color = "red";
-                ctx.beginPath();
-                ctx.fillStyle = color;
-                ctx.arc(x$1, y$1 - 20 | 0, 20, 0, Math.imul(3, Math.PI | 0));
-                ctx.fill();
-                ctx.closePath();
-                return ;
+                drawMetal(metal, metal.color, true);
+                return drawDetector(x$1, y$1, "red");
               }
               
             });
