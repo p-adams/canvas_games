@@ -155,18 +155,20 @@ function MetalDetector(Props) {
         metals.forEach(function (metal) {
               return drawMetal(metal, backgroundColor, false);
             });
+        drawDetector(x$1, y$1, detectorColor);
         metals.forEach(function (metal) {
-              drawDetector(x$1, y$1, detectorColor);
               if (distance(x$1, y$1, metal) < 40) {
                 if (!metalsDetected.includes(metal)) {
                   Curry._1(setMetalsDetected, (function (_prev) {
                           return [metal].concat(metalsDetected);
                         }));
                 }
-                drawMetal(metal, metal.color, true);
                 return drawDetector(x$1, y$1, "red");
+              } else if (distance(x$1, y$1, metal) < 80) {
+                return drawDetector(x$1, y$1, "yellow");
+              } else {
+                return ;
               }
-              
             });
         return ;
       } else {
@@ -178,8 +180,7 @@ function MetalDetector(Props) {
   var pickUp = function (param) {
     metals.forEach(function (metal) {
           if (distance(mouseCoords.x, mouseCoords.y, metal) < 40) {
-            console.log("pick up metal");
-            return ;
+            return drawMetal(metal, metal.color, true);
           }
           
         });

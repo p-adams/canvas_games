@@ -88,21 +88,17 @@ let make = () => {
 
   let detect = (x, y) => {
     Js.Array2.forEach(metals, metal => {
-      // TODO: account for different distances.
-      // less than detectionOffset: metal detector is within pick up range of object
-      // less than detectionOffset + 40px (TBD): metal detector is within detection range but cannot pick up object
-      // render metal detector
-      drawDetector(x, y, detectorColor)
       if distance(x, y, metal) < detectionOffest->Belt.Int.toFloat {
         // add metal to list of detected metals (detected but not picked up)
         if !Js.Array.includes(metal, metalsDetected) {
           setMetalsDetected(_prev => Js.Array.concat(metalsDetected, [metal]))
         }
 
-        // redraw metal with point text
-        drawMetal(metal, metal.color, true)
-        // redraw detector
+        // detector is within pick up range
         drawDetector(x, y, "red")
+      } else if distance(x, y, metal) < (detectionOffest + 40)->Belt.Int.toFloat {
+        // detector is near pick up range
+        drawDetector(x, y, "yellow")
       }
     })
   }
@@ -114,6 +110,9 @@ let make = () => {
         Js.Array2.forEach(metals, metal => {
           drawMetal(metal, backgroundColor, false)
         })
+        // render metal detector
+        drawDetector(x, y, detectorColor)
+        // begin detection
         detect(x, y)
       }
 
@@ -138,7 +137,7 @@ let make = () => {
     Js.Array2.forEach(metals, metal => {
       if distance(mouseCoords.x, mouseCoords.y, metal) < detectionOffest->Belt.Int.toFloat {
         // display metal on canvas with its point value and then remove metal from canvas and add points to running score
-        Js.log("pick up metal")
+        drawMetal(metal, metal.color, true)
       }
     })
   }
