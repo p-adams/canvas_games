@@ -87,7 +87,7 @@ function MetalDetector(Props) {
                     return dom.getContext("2d");
                   }));
           }
-          for(var i = 0; i <= 9; ++i){
+          for(var i = 1; i <= 3; ++i){
             var color = getRandomColor(undefined);
             Curry._1(setMetals, (function(i,color){
                 return function (_prev) {
@@ -189,7 +189,7 @@ function MetalDetector(Props) {
         });
     
   };
-  return React.createElement("div", undefined, React.createElement("h2", undefined, "metal detector game"), React.createElement("div", undefined, "metals detected: ", metalsDetected.length), React.createElement("div", undefined, "metals picked up: ", String(match$4[0]), "/", String(9)), React.createElement(GameCanvas.make, {
+  return React.createElement("div", undefined, React.createElement("h2", undefined, "metal detector game"), React.createElement("div", undefined, "metals detected: ", metalsDetected.length), React.createElement("div", undefined, "metals picked up: ", String(match$4[0]), "/", String(3)), React.createElement(GameCanvas.make, {
                   width: dimensions.current.width,
                   height: dimensions.current.height,
                   canvasClassName: "metal-detector-canvas",
@@ -201,7 +201,7 @@ function MetalDetector(Props) {
 
 var detectionOffest = 40;
 
-var metalsOnCanvas = 9;
+var metalsOnCanvas = 3;
 
 var make = MetalDetector;
 

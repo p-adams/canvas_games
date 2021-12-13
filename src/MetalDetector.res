@@ -4,7 +4,7 @@ type metal = {id: int, x: int, y: int, color: string, detected: bool, score: int
 let backgroundColor = "#e5d3b3"
 let detectorColor = "#212121"
 let detectionOffest = 40
-let metalsOnCanvas = 9
+let metalsOnCanvas = 3
 let getRandomInt = (min, max) => {
   Js.Math.random_int(min, max)
 }
@@ -42,7 +42,7 @@ let make = () => {
     | Some(dom) => setCtx(_prev => CanvasApi.getContext(dom, "2d"))
     | None => ()
     }
-    for i in 0 to metalsOnCanvas {
+    for i in 1 to metalsOnCanvas {
       let color = getRandomColor()
       setMetals(_prev =>
         Js.Array2.concat(
@@ -141,6 +141,7 @@ let make = () => {
         metal.id !== id
       })
     )
+
     setMetalsPickedUp(prev => prev + 1)
   }
 
