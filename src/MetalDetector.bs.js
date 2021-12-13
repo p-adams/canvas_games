@@ -155,8 +155,8 @@ function MetalDetector(Props) {
         metals.forEach(function (metal) {
               return drawMetal(metal, backgroundColor, false);
             });
-        drawDetector(x$1, y$1, detectorColor);
         metals.forEach(function (metal) {
+              drawDetector(x$1, y$1, detectorColor);
               if (distance(x$1, y$1, metal) < 40) {
                 if (!metalsDetected.includes(metal)) {
                   Curry._1(setMetalsDetected, (function (_prev) {
